@@ -9,9 +9,15 @@ class Scholar(models.Model):
 	class_number = models.CharField(max_length=5)
 	date_of_birth = models.DateField('День рождения')
 
+	def __str__(self):
+		return f'{self.second_name} {self.first_name} {self.third_name}'
+
 
 class Discipline(models.Model):
 	name = models.CharField(max_length=120)
+
+	def __str__(self):
+		return self.name
 
 
 class Mark(models.Model):
@@ -21,5 +27,5 @@ class Mark(models.Model):
 	volume = models.IntegerField()
 
 	def __str__(self):
-		return '{3} - Ученик: {0}\nПредмет: {1} - Оценка: {2}\n'.format(self.scholar.first_name, self.discipline.name, self.volume, self.date_of_mark)
+		return f'{self.date_of_mark} - {self.scholar.__str__()} - {self.discipline.__str__()} - {self.volume}'
 
