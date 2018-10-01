@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+{% if scholar_list %}
+    <ul>
+    {% for scholar in scholar_list %}
+        <li><a href="/{{ scholar.id }}/">{{ scholar.first_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No scholar are available.</p>
+{% endif %}
+</body>
+</html>

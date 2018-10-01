@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scholar info</title>
+</head>
+<body>
+    <h2>Ученик</h2>
+    {% for key, value in scholar.items %}
+        <p>{{ key }} : {{ value }}</p>
+    {% endfor %}
+    <h2>Оценки</h2>
+    <table border="1p">
+        {% if marks %}
+            <tr>
+                    <th>№</th>
+                    <th>Ученик</th>
+                    <th>Предмет</th>
+                    <th>Дата</th>
+                    <th>Оценка</th>
+                    <th>Баллы</th>
+            </tr>
+            {% for mark in marks %}
+            <tr>
+                {% for value in mark.values %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+</body>
+</html>
