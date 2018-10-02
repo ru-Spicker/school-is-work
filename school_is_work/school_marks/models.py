@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 
 class Scholar(models.Model):
@@ -64,3 +66,28 @@ class Mark(models.Model):
 	class Meta:
 		verbose_name = 'Оценка'
 		verbose_name_plural = 'Оценки'
+
+
+class Trimester(models.Model):
+	number = models.IntegerField('Триместр', default=1)
+	start_date = models.DateField('Дата начала', default=timezone.now())
+	end_date = models.DateField('Дата окончания', default=timezone.now())
+
+	def __str__(self):
+		return f'№{self.number}\t{self.start_date} - {self.end_date}'
+
+	class Meta:
+		verbose_name = 'Триместр'
+		verbose_name_plural = 'Триместры'
+
+
+def get_current_trimester(date=timezone.now()):
+	"""Returns a Trimester object that includes the specified date
+	If the specified date is not included in any Trimester, returns the last Trimester
+	that began before the specified date."""
+
+	cur_trimester = Trimester.objects.filter(start_date__lte=date, end_date__gte=date)
+	if not cur_trimester:
+		cur_trimester = Trimester.objects.filter(start_date__lte=date)
+	return cur_trimester
+
