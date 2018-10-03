@@ -80,26 +80,6 @@ class Trimester(models.Model):
 		verbose_name_plural = 'Триместры'
 
 
-class School(models.Model):
-	name = models.CharField('Название', max_length=120)
-	adress = models.CharField('Адрес', max_length=200, default='')
-
-	class Meta:
-		verbose_name = 'Школа'
-		verbose_name_plural = 'Школы'
-
-
-class Grade(models.Model):
-	name = models.CharField('Класс', max_length=3)
-	scholar = models.ManyToManyField(Scholar)
-	discipline = models.ManyToManyField(Discipline)
-	school = models.ForeignKey(School)
-
-	class Meta:
-		verbose_name = 'Класс'
-		verbose_name_plural = 'Классы'
-
-
 def get_current_trimester(date=timezone.now()):
 	"""Returns a Trimester object that includes the specified date
 	If the specified date is not included in any Trimester, returns the last Trimester
