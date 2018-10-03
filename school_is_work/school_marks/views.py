@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpRequest, HttpResponse
-from .models import Scholar, Mark
+from .models import Scholar, Mark, get_current_trimester, get_marks
 from django.forms.models import model_to_dict
 
 
@@ -12,10 +12,11 @@ def index(request):
 
 def scholar_info(request, scholar_id):
 	scholar = get_object_or_404(Scholar, pk=scholar_id)
-	marks_set = scholar.mark_set.order_by('-date_of_mark', 'discipline')
-	marks = [model_to_dict(mark) for mark in marks_set]
+	trimester = get_current_trimester()
+	if trimester:
+		marks = get_marks(scholar_id, trimester.start_date, trimester.end_date)
+	print(marks)
 	context = {'scholar': model_to_dict(scholar), 'marks': marks}
-	print(context)
 	return render(request, 'school_marks/scholar_info.html', context)
 
 

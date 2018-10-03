@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.shortcuts import get_object_or_404
 
 
 class Scholar(models.Model):
@@ -81,6 +80,26 @@ class Trimester(models.Model):
 		verbose_name_plural = 'Триместры'
 
 
+class School(models.Model):
+	name = models.CharField('Название', max_length=120)
+	adress = models.CharField('Адрес', max_length=200, default='')
+
+	class Meta:
+		verbose_name = 'Школа'
+		verbose_name_plural = 'Школы'
+
+
+class Grade(models.Model):
+	name = models.CharField('Класс', max_length=3)
+	scholar = models.ManyToManyField(Scholar)
+	discipline = models.ManyToManyField(Discipline)
+	school = models.ForeignKey(School)
+
+	class Meta:
+		verbose_name = 'Класс'
+		verbose_name_plural = 'Классы'
+
+
 def get_current_trimester(date=timezone.now()):
 	"""Returns a Trimester object that includes the specified date
 	If the specified date is not included in any Trimester, returns the last Trimester
@@ -89,5 +108,20 @@ def get_current_trimester(date=timezone.now()):
 	cur_trimester = Trimester.objects.filter(start_date__lte=date, end_date__gte=date)
 	if not cur_trimester:
 		cur_trimester = Trimester.objects.filter(start_date__lte=date)
-	return cur_trimester
+	if cur_trimester.exists():
+		return cur_trimester[0]
+	else:
+		return None
+
+
+def get_marks(scholar, start_date, end_date, discipline=None):
+	if discipline:
+		marks = Mark.objects.filter(scholar_id=scholar, date_of_mark__gte=start_date, date_of_mark__lte=end_date,
+					discipline=discipline).values(
+					'discipline', 'date_of_mark', 'mark', 'cost').order_by('-date_of_mark')
+	else:
+		marks = Mark.objects.filter(scholar_id=scholar,
+									date_of_mark__gte=start_date, date_of_mark__lte=end_date).values(
+									'discipline__name', 'date_of_mark', 'mark', 'cost').order_by('-date_of_mark')
+	return list(marks)
 
