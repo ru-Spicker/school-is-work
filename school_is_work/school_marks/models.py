@@ -2,12 +2,34 @@ from django.db import models
 from django.utils import timezone
 
 
+class School(models.Model):
+	name = models.CharField('Название', max_length=120)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = 'Школа'
+		verbose_name_plural = 'Школы'
+
+
+class Grade(models.Model):
+	name = models.CharField('Класс', max_length=3, default='')
+	school = models.ForeignKey(School, on_delete=models.PROTECT, null=True, verbose_name='Школа')
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = 'Класс'
+		verbose_name_plural = 'Классы'
+
+
 class Scholar(models.Model):
 	first_name = models.CharField('Имя', max_length=50)
 	second_name = models.CharField('Фамилия', max_length=50)
 	third_name = models.CharField('Отчество', max_length=50)
-	school_number = models.IntegerField('Номер школы')
-	class_number = models.CharField('Класс', max_length=5)
+	grade = models.ForeignKey(Grade, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Класс')
 	date_of_birth = models.DateField('День рождения')
 	account = models.IntegerField('Очки', default=0)
 

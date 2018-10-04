@@ -11,18 +11,18 @@ def index(request):
 
 
 def scholar_info(request, scholar_id):
-	scholar = get_object_or_404(Scholar, pk=scholar_id)
+	qs = Scholar.objects.filter(pk=scholar_id).values('first_name', 'second_name', 'grade__name', 'grade__school__name')
+	scholar = get_object_or_404(qs)
 	trimester = get_current_trimester()
 	if trimester:
 		marks = get_marks(scholar_id, trimester.start_date, trimester.end_date)
-	print(marks)
-	context = {'scholar': model_to_dict(scholar), 'marks': marks}
+	print(scholar)
+	context = {'scholar': scholar, 'marks': marks}
 	return render(request, 'school_marks/scholar_info.html', context)
 
 
 def make_marks_table(scholar_id, start_date, end_date):
 	pass
-
 
 
 def add_mark(request, scholar_id):
