@@ -126,12 +126,21 @@ def get_marks(scholar, start_date, end_date, discipline=None):
 									date_of_mark__gte=start_date, date_of_mark__lte=end_date).values(
 									'discipline__name', 'date_of_mark', 'mark', 'cost').order_by('-date_of_mark')
 
-	print(marks)
+	earnings = {}
+	for mark in marks:
+		if mark['discipline__name'] in earnings:
+			earnings[mark['discipline__name']] += mark['cost']
+		else:
+			earnings[mark['discipline__name']] = mark['cost']
+	earnings['Итого'] = sum(earnings.values())
+
+	print(earnings)
+
 	table = {m['date_of_mark']: {} for m in marks}
 	for m in marks: table[m['date_of_mark']] = {m['discipline__name']: [] for m in marks}
 	for m in marks: table[m['date_of_mark']][m['discipline__name']].append(m['mark'])
 	for key, item in table.items():
 		print(str(key) + '\t' + repr(item))
 
-	return table
+	return table, earnings
 

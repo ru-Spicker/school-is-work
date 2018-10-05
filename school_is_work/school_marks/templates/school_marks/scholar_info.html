@@ -24,13 +24,25 @@
                 <tr>
                     <td>{{ date }}</td>
                     {% for value in markdict.values %}
-                        <td>{{ value|join:", " }}</td>
+                        <td align="center">{{ value|join:", " }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
+
         {% else %}
         <p>Ненайден триместр с указанной датой</p>
         {% endif %}
+    </table>
+<p></p>
+    <table border="1p">
+        <tr>
+            <th>Предмет</th><th>Сумма</th>
+        </tr>
+        {% for key, value in earnings.items %}
+            <tr {% if forloop.last%} align="right" {% endif %}>
+                <td>{{ key }}</td><td align="right">{{ value }}</td>
+            </tr>
+        {% endfor %}
     </table>
 </body>
 </html>

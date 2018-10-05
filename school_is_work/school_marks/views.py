@@ -15,9 +15,9 @@ def scholar_info(request, scholar_id):
 	scholar = get_object_or_404(qs)
 	trimester = get_current_trimester()
 	if trimester:
-		marks = get_marks(scholar_id, trimester.start_date, trimester.end_date)
+		marks, earnings = get_marks(scholar_id, trimester.start_date, trimester.end_date)
 	print(scholar)
-	context = {'scholar': scholar, 'marks': marks}
+	context = {'scholar': scholar, 'marks': marks, 'earnings': earnings}
 	return render(request, 'school_marks/scholar_info.html', context)
 
 
