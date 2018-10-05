@@ -125,5 +125,13 @@ def get_marks(scholar, start_date, end_date, discipline=None):
 		marks = Mark.objects.filter(scholar_id=scholar,
 									date_of_mark__gte=start_date, date_of_mark__lte=end_date).values(
 									'discipline__name', 'date_of_mark', 'mark', 'cost').order_by('-date_of_mark')
-	return list(marks)
+
+	print(marks)
+	table = {m['date_of_mark']: {} for m in marks}
+	for m in marks: table[m['date_of_mark']] = {m['discipline__name']: [] for m in marks}
+	for m in marks: table[m['date_of_mark']][m['discipline__name']].append(m['mark'])
+	for key, item in table.items():
+		print(str(key) + '\t' + repr(item))
+
+	return table
 

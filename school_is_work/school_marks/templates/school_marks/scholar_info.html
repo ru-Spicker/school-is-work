@@ -12,18 +12,21 @@
     <h2>Оценки</h2>
     <table border="1p">
         {% if marks %}
-            <tr>
-                    <th>Предмет</th>
-                    <th>Дата</th>
-                    <th>Оценка</th>
-                    <th>Баллы</th>
-            </tr>
-            {% for mark in marks %}
-            <tr>
-                {% for value in mark.values %}
-                    <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
+            {% for date, markdict in marks.items %}
+                {% if forloop.first %}
+                    <tr>
+                        <th>Дата</th>
+                         {% for key in markdict%}
+                        <th>{{ key }}</th>
+                         {% endfor %}
+                    </tr>
+                {% endif%}
+                <tr>
+                    <td>{{ date }}</td>
+                    {% for value in markdict.values %}
+                        <td>{{ value|join:", " }}</td>
+                    {% endfor %}
+                </tr>
             {% endfor %}
         {% else %}
         <p>Ненайден триместр с указанной датой</p>
