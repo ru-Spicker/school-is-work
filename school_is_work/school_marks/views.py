@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpRequest, HttpResponse
 from .models import Scholar, Mark, get_current_trimester, get_marks
-from django.forms.models import model_to_dict
+from .forms import MarkForm
+from django.views import generic
 
 
 def index(request):
@@ -21,12 +22,8 @@ def scholar_info(request, scholar_id):
 	return render(request, 'school_marks/scholar_info.html', context)
 
 
-def make_marks_table(scholar_id, start_date, end_date):
-	pass
-
-
-def add_mark(request, scholar_id):
-	return HttpResponse('Добавление оценки')
+class MarkDetails(generic.DetailView):
+	model = Mark
 
 
 def diary(request, scholar_id):
