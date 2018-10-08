@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -75,8 +76,8 @@ class Discipline(models.Model):
 
 
 class Mark(models.Model):
-	scholar = models.ForeignKey(Scholar, on_delete=models.CASCADE, verbose_name='Учащийся')
-	discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, verbose_name='Предмет')
+	scholar = models.ForeignKey(Scholar, on_delete=models.PROTECT, verbose_name='Учащийся')
+	discipline = models.ForeignKey(Discipline, on_delete=models.PROTECT, verbose_name='Предмет')
 	date_of_mark = models.DateField('Дата')
 	mark = models.IntegerField('Оценка')
 	cost = models.IntegerField('Цена')
@@ -85,7 +86,7 @@ class Mark(models.Model):
 		return f'{self.date_of_mark} - {self.scholar.__str__()} - {self.discipline.__str__()} - {self.mark}'
 
 	def get_absolute_url(self):
-		return f'{self.scholar.id}/'
+		return reverse('info', kwargs={'scholar_id': self.scholar.pk})
 
 	class Meta:
 		verbose_name = 'Оценка'
@@ -123,11 +124,12 @@ def get_marks(scholar, start_date, end_date, discipline=None):
 	if discipline:
 		marks = Mark.objects.filter(scholar_id=scholar, date_of_mark__gte=start_date, date_of_mark__lte=end_date,
 					discipline=discipline).values(
-					'discipline', 'date_of_mark', 'mark', 'cost').order_by('-date_of_mark')
+					'discipline__name', 'date_of_mark', 'mark', 'cost', 'id').order_by('-date_of_mark', 'discipline__name')
 	else:
 		marks = Mark.objects.filter(scholar_id=scholar,
 									date_of_mark__gte=start_date, date_of_mark__lte=end_date).values(
-									'discipline__name', 'date_of_mark', 'mark', 'cost').order_by('-date_of_mark')
+									'discipline__name', 'date_of_mark', 'mark', 'cost', 'id'
+									).order_by('-date_of_mark', 'discipline__name')
 
 	earnings = {}
 	for mark in marks:
@@ -137,13 +139,9 @@ def get_marks(scholar, start_date, end_date, discipline=None):
 			earnings[mark['discipline__name']] = mark['cost']
 	earnings['Итого'] = sum(earnings.values())
 
-	print(earnings)
-
 	table = {m['date_of_mark']: {} for m in marks}
 	for m in marks: table[m['date_of_mark']] = {m['discipline__name']: [] for m in marks}
-	for m in marks: table[m['date_of_mark']][m['discipline__name']].append(m['mark'])
-	for key, item in table.items():
-		print(str(key) + '\t' + repr(item))
+	for m in marks: table[m['date_of_mark']][m['discipline__name']].append({'mark': m['mark'], 'id': m['id']})
 
 	return table, earnings
 

@@ -5,7 +5,7 @@
     <title>Scholar info</title>
 </head>
 <body>
-    <h2>Ученик</h2>
+    <h2>Учащийся: {{ scholar.fullname }}</h2>
     {% for key, value in scholar.items %}
         <p>{{ key }} : {{ value }}</p>
     {% endfor %}
@@ -16,15 +16,19 @@
                 {% if forloop.first %}
                     <tr>
                         <th>Дата</th>
-                         {% for key in markdict%}
-                        <th>{{ key }}</th>
+                         {% for discipline in markdict %}
+                        <th>{{ discipline }}</th>
                          {% endfor %}
                     </tr>
                 {% endif%}
                 <tr>
                     <td>{{ date }}</td>
-                    {% for mark in markdict.values %}
-                        <td align="center">{{ mark|join:", " }}</td>
+                    {% for marklist in markdict.values %}
+                        <td align="center">
+                        {% for mark in marklist %}
+                            <a href="{% url 'mark_details' mark.id %}">{{ mark.mark }}</a>&nbsp;
+                        {% endfor %}
+                        </td>
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -44,5 +48,6 @@
             </tr>
         {% endfor %}
     </table>
+
 </body>
 </html>

@@ -3,7 +3,7 @@ from .models import Scholar, Discipline, Mark, MarksCost, Trimester, Grade, Scho
 
 
 class MarksAdmin(admin.ModelAdmin):
-	list_filter = ['scholar']
+	list_filter = ['scholar', 'discipline']
 
 
 class MarksInline(admin.TabularInline):

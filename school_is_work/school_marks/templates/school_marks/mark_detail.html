@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Детали оценки</title>
 </head>
 <body>
     <h1>{{ mark }}</h1>
-    <p>id {{ mark.scholar.id }} - {{ mark.scholar }}</p>
-    <p>id {{ mark.id }} - {{ mark.mark }}</p>
+    <p>Учащийся: <a href="{% url 'info' mark.scholar.id %}">{{ mark.scholar }}</a></p>
+    <p>Оценка: {{ mark.mark }}</p>
+    <p>Предмет: {{ mark.discipline.name }}</p>
+    <p>Цена: {{ mark.cost }} </p>
 
+<p><a href="{% url 'mark_update' mark.id %}">Изменить</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="{% url 'mark_delete' mark.id %}">Удалить</a></p>
 
 </body>
 </html>
