@@ -23,8 +23,8 @@
                 {% endif%}
                 <tr>
                     <td>{{ date }}</td>
-                    {% for value in markdict.values %}
-                        <td align="center">{{ value|join:", " }}</td>
+                    {% for mark in markdict.values %}
+                        <td align="center">{{ mark|join:", " }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -33,7 +33,7 @@
         <p>Ненайден триместр с указанной датой</p>
         {% endif %}
     </table>
-<p></p>
+<p><a href="{% url 'mark_create' %}">Добавить оценку</a></p>
     <table border="1p">
         <tr>
             <th>Предмет</th><th>Сумма</th>

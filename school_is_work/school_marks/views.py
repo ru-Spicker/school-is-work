@@ -26,5 +26,11 @@ class MarkDetails(generic.DetailView):
 	model = Mark
 
 
+class MarkCreate(generic.edit.CreateView):
+	model = Mark
+	template_name_suffix = '_create_form'
+	fields = ['scholar', 'discipline', 'date_of_mark', 'mark', 'cost']
+
+
 def diary(request, scholar_id):
 	return HttpResponse('Дневник')

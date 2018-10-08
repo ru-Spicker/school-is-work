@@ -84,6 +84,9 @@ class Mark(models.Model):
 	def __str__(self):
 		return f'{self.date_of_mark} - {self.scholar.__str__()} - {self.discipline.__str__()} - {self.mark}'
 
+	def get_absolute_url(self):
+		return f'{self.scholar.id}/'
+
 	class Meta:
 		verbose_name = 'Оценка'
 		verbose_name_plural = 'Оценки'
